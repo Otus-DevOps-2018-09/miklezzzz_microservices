@@ -15,13 +15,13 @@ HW13: Self study
 
 - Docker engine was deployed remotely in GCE instance by 'docker-machine' utility.
 
-- Dockerfile was created to compose Reddit-app container.
+- Dockerfile was created to compose Reddit-app image.
 
-- Reddit-app container was fired up on a remote docker engine via 'docker-machine'.
+- Reddit-app container was fired up from Reddit-app image on a remote docker engine via 'docker-machine'.
 
-- Reddit-app container was pushed to the Docker Hub.
+- Reddit-app image was pushed to the Docker Hub.
 
-- Various test were performed with a container to understand how containers can be used/controlled/configured from CLI.
+- Various test were performed with containers to understand how containers can be used/controlled/configured from CLI.
 
 - * Terraform configuration with multiple instance support was added. Number of running instances can be controlled by -var 'instance_count = #' switch.
 
