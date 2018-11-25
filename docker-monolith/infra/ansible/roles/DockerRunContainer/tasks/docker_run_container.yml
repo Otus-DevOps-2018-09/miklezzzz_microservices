@@ -1,0 +1,15 @@
+---
+- name: Create container
+  docker_container:
+    name: reddit
+    image: miklezzzz/otus-reddit:1.0
+
+- name: Run container
+  docker_container:
+    name: reddit
+    image: miklezzzz/otus-reddit:1.0
+    ports: 
+      - "9292:9292"
+    state: started
+  tags: dockerrun
+

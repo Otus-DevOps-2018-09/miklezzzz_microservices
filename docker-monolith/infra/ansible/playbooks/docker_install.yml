@@ -1,0 +1,8 @@
+---
+- name: Configure host to run docker daemon
+  hosts: all
+  become: true
+
+  roles:
+    - DockerHost
+
