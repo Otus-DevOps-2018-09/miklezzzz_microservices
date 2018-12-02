@@ -1,0 +1,14 @@
+FROM alpine:latest
+
+ENV APP_HOME /app
+COPY . $APP_HOME
+WORKDIR $APP_HOME
+
+RUN apk -X http://dl-cdn.alpinelinux.org/alpine/v3.7/main -X http://dl-cdn.alpinelinux.org/alpine/v3.7/community add --no-cache ruby=2.4.5-r0 ruby-dev=2.4.5-r0 build-base && gem install bundler --no-ri --no-rdoc && rm -rf /var/lib/apk/* && bundle install --no-cache && rm -rf /root/.bundle
+
+ENV POST_SERVICE_HOST post
+ENV POST_SERVICE_PORT 5000
+ENV COMMENT_SERVICE_HOST comment
+ENV COMMENT_SERVICE_PORT 9292
+
+CMD ["puma"]
