@@ -42,3 +42,18 @@ HW14: Self study
 - To get smaller containers we should rewrite Dockerfiles. We have to use alpine linux, install only necessary packages and delete caches after all.
 
 - Docker volume was created to add statefulness to MongoDB microservice.
+
+++++++++++++++++++++++++++++
+HW15: Self study
+++++++++++++++++++++++++++++
+
+- Different network types for Docker were tested.
+
+- Docker-Compose utility was installed and used in conjunction with an yml configuration file to perform a complex deployment of microservices of Reddit App.
+
+- Docker-Compose declarative yml file was parametirezed to use environment variables.
+
+- "Each configuration has a project name. If you supply a -p flag, you can specify a project name. If you don’t specify the flag, Compose uses the current directory name."
+
+- docker-dompose.yml file was modified to use bind volumes (to change application code on fly) and "command" parameter to override Dockerfiles CMD arguments on build.
+
