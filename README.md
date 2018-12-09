@@ -58,7 +58,7 @@ HW15: Self study
 - docker-dompose.yml file was modified to use bind volumes (to change application code on fly) and "command" parameter to override Dockerfiles CMD arguments on build.
 
 ++++++++++++++++++++++++++++
-HW15: Self study
+HW16: Self study
 ++++++++++++++++++++++++++++
 
 - GitlabCI CE was installed (Docker+Omnibus) and configured.
