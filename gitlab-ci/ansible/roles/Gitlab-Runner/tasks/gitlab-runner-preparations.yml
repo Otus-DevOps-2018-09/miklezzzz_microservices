@@ -1,0 +1,6 @@
+---
+ - name: Creates gitlab-runner config directory
+   file:
+     path: /srv/gitlab-runner/config
+     state: directory
+   

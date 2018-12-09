@@ -1,0 +1,4 @@
+---
+# tasks file for Gitlab-Runner
+  - include: gitlab-runner-preparations.yml
+  - include: install_and_run_gitlab_runner.yml
