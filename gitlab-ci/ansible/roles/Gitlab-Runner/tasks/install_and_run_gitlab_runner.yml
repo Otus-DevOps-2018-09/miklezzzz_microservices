@@ -1,21 +1,24 @@
 ---
 - name: Create gitlab-runner container
   docker_container:
-    name: gitlab-runner
+    name: gitlab-runner-{{ item }}
     image: gitlab/gitlab-runner:latest
+  loop: "{{ query('sequence', 'start=1 end={{ n_of_runners }}') }}"
 
 - name: Run container
   docker_container:
-    name: gitlab-runner
+    name: gitlab-runner-{{ item }}
     image: gitlab/gitlab-runner:latest
     state: started
     volumes:
-      - /srv/gitlab-runner/config:/etc/gitlab-runner
+      - /srv/gitlab-runner-{{ item }}/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
+  loop: "{{ query('sequence', 'start=1 end={{ n_of_runners }}') }}"
   tags: gitlab-runner-run
 
 - name: Run gitlab-runner
-  command: docker exec gitlab-runner gitlab-runner register --non-interactive --url http://"{{ gitlab_ip }}" --registration-token "{{ gitlab_token }}" --executor docker --docker-image aline:latest --name runner-"{{ ansible_hostname }}" --locked False --run-untagged True
+  command: docker exec gitlab-runner-{{ item }} gitlab-runner register --non-interactive --url http://"{{ gitlab_ip }}" --registration-token "{{ gitlab_token }}" --executor docker --docker-image aline:latest --name runner-"{{ ansible_hostname }}-gitlab-runner-{{ item }}" --locked False --run-untagged True
   become: true
+  loop: "{{ query('sequence', 'start=1 end={{ n_of_runners }}') }}"
   tags: gitlab-runner-run
 

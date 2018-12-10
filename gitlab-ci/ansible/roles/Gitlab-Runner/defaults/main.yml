@@ -1,2 +1,3 @@
 ---
 # defaults file for Gitlab-Runner
+n_of_runners: 4
