@@ -1,0 +1,8 @@
+---
+- name: Configure docker host to run container
+  hosts: all
+  become: true
+
+  roles:
+    - DockerRunContainer
+

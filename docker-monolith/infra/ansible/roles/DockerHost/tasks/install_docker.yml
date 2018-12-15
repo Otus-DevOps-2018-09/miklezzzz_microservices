@@ -1,0 +1,46 @@
+---
+- name: Add apt packages to use HTTPS
+  apt: "name={{ item }} state=present update_cache=yes"
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+  tags: docker
+ 
+- name: Add Docker repo key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+  tags: docker
+
+- name: Add Docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    state: present
+    filename: docker
+  tags: docker
+
+- name: Install Docker service with dependencies
+  apt: "name={{ item }} state=present update_cache=yes"
+  with_items:
+    - docker-ce
+  tags: docker
+
+- name: Enable Docker service
+  systemd: 
+    state: started
+    enabled: yes
+    name: docker
+  tags: docker
+
+- name: Install python-pip
+  apt: "name={{ item }} state=present update_cache=yes"
+  with_items:
+    - python-pip
+  tags: docker
+
+
+- name: Install python module "docker" to run containers
+  pip: 
+    name: docker
+  tags: docker
+
