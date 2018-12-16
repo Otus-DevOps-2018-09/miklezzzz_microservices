@@ -29,3 +29,16 @@ HW13: Self study
 
 - * Packer template with ready to go Docker Engine was prepared. Ansible provisioner was used to prepare it.
 
+++++++++++++++++++++++++++++
+HW14: Self study
+++++++++++++++++++++++++++++
+
+- Reddit App was segregated into microservices
+
+- Each microservice was placed into different container
+
+- Microservices communicate with their counterparts by means of network aliases (much like ad-hoc DNS records)
+
+- To get smaller containers we should rewrite Dockerfiles. We have to use alpine linux, install only necessary packages and delete caches after all.
+
+- Docker volume was created to add statefulness to MongoDB microservice.
