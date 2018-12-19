@@ -57,3 +57,19 @@ HW15: Self study
 
 - docker-dompose.yml file was modified to use bind volumes (to change application code on fly) and "command" parameter to override Dockerfiles CMD arguments on build.
 
+++++++++++++++++++++++++++++
+HW16: Self study
+++++++++++++++++++++++++++++
+
+- GitlabCI CE was installed (Docker+Omnibus) and configured.
+
+- Example project was created to test CI/CD pipelines and runners.
+
+- Reddit app source code was added to repository to perform some basic tests over it.
+
+- Simple test was defined to demonstrate how CI/CD pipeline works.
+
+- Example project notifications were intergrated with Slack chat via webhooks (https://devops-team-otus.slack.com/messages/CDABTQYMR/).
+
+- Basic infrastructure (terraform + ansible) was defined and test to provide a scalable number of Gitlab CI runners in Google cloud.
+

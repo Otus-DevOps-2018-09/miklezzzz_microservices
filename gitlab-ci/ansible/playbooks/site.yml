@@ -1,0 +1,6 @@
+---
+- name: Main Playbook
+  hosts: tag_gitlab-runner
+
+- import_playbook: gitlab-runner.yml
+

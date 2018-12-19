@@ -1,0 +1,8 @@
+---
+- name: Configure docker host to run container
+  hosts: tag_gitlab-runner
+  become: true
+
+  roles:
+    - Gitlab-Runner
+
