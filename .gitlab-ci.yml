@@ -28,9 +28,10 @@ build_server:
     - echo $GCP_AUTH > ~/cred.json
     - gcloud auth activate-service-account -q --key-file ~/cred.json --no-user-output-enabled
     - gcloud compute instances create stage-build-$CI_COMMIT_SHA --boot-disk-size=30GB --image docker-host --machine-type=g1-small --restart-on-failure --zone $GCP_ZONE -q --tags docker-build-stage,http-server --no-user-output-enabled
+    - export ENV_IP=`gcloud compute instances list | grep stage-build-$CI_COMMIT_SHA | awk {'print $5'}`
   environment:
     name: branch/$CI_COMMIT_REF_NAME
-    url: http://$CI_ENVIRONMENT_SLUG.example.com
+    url: http://$ENV_IP.example.com
     on_stop: delete_server
 
 delete_server:
