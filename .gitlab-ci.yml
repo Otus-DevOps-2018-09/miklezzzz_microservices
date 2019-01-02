@@ -1,9 +1,14 @@
 image: ruby:2.4.2 
 
+services:
+- docker:dind
+
 stages:
   - build
   - test
-  - deploy
+  - review
+  - stage
+  - production
 
 variables:
  DATABASE_URL: 'mongodb://mongo/user_posts'
@@ -11,6 +16,78 @@ variables:
 before_script:
  - cd reddit
  - bundle install 
+
+build_server:
+  stage: build
+  before_script: []
+  variables:
+    GCP_ZONE: 'europe-west1-b'
+  image: google/cloud-sdk:alpine
+  script:
+    - echo "Deploy to STAGE _REVIEW_ $CI_ENVIRONMENT_SLUG"
+    - echo $GCP_AUTH > ~/cred.json
+    - gcloud auth activate-service-account -q --key-file ~/cred.json --no-user-output-enabled
+    - gcloud compute instances create stage-build-$CI_COMMIT_SHA --boot-disk-size=30GB --image docker-host --machine-type=g1-small --restart-on-failure --zone $GCP_ZONE -q --tags docker-build-stage,http-server --no-user-output-enabled
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+    on_stop: delete_server
+
+delete_server:
+  stage: build 
+  before_script: []
+  variables:
+    GCP_ZONE: 'europe-west1-b'
+  image: google/cloud-sdk:alpine
+  script:
+    - echo "Delete environment _REVIEW_ $CI_ENVIRONMENT_SLUG"
+    - echo $GCP_AUTH > ~/cred.json
+    - gcloud auth activate-service-account -q --key-file ~/cred.json --no-user-output-enabled
+    - gcloud compute instances delete stage-build-$CI_COMMIT_SHA --zone $GCP_ZONE -q --no-user-output-enabled
+  when: manual
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    action: stop
+
+build_application:
+  stage: build
+  image: docker:latest
+  before_script: []
+  script:
+    - docker login $CI_REGISTRY -u $docker_user -p $docker_password
+    - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH/stage-build-$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY/$CI_PROJECT_PATH/stage-build-$CI_COMMIT_SHA
+    
+
+  when: manual
+
+
+deploy_application:
+  stage: build
+  before_script: []
+  variables:
+    CLOUD_SDK_VERSION: '228.0.0'
+    ANSIBLE_HOST_KEY_CHECKING: 'False'
+  image: google/cloud-sdk:alpine
+  script:
+    - apk add ansible py-pip python-dev g++
+    - pip install apache-libcloud pycrypto
+    - echo "$GCP_AUTH" > ~/cred.json
+    - gcloud auth activate-service-account -q --key-file ~/cred.json --no-user-output-enabled
+    - mkdir ~/.ssh
+    - echo "$INFRA_AUTH" > ~/.ssh/key
+    - chmod 700 -R ~/.ssh/
+    - echo "[gce]" > ./gitlab-ci/ansible/gce.ini
+    - echo "gce_project_id = "$(cat ~/cred.json | grep proj | awk {'print $2'} | tr -d '",') >> ./gitlab-ci/ansible/gce.ini
+    - echo "gce_service_account_pem_file_path = /root/cred.json" >> ./gitlab-ci/ansible/gce.ini
+    - echo "gce_service_account_email_address = "$(cat ~/cred.json | grep email | awk {'print $2'} | tr -d '",') >> ./gitlab-ci/ansible/gce.ini
+    - export GCE_INI_PATH=$(pwd)/gitlab-ci/ansible/gce.ini
+    - chmod u+x ./gitlab-ci/ansible/gce.py
+    - ansible -i ./gitlab-ci/ansible/gce.py --private-key=~/.ssh/key --user=shma -m ping stage-build-$CI_COMMIT_SHA
+    - ansible-playbook --private-key=~/.ssh/key --user=shma ./gitlab-ci/ansible/playbooks/deploy-app.yml -i ./gitlab-ci/ansible/gce.py --limit stage-build-$CI_COMMIT_SHA -e "CI_REGISTRY=$CI_REGISTRY CI_DEPLOY_USER=$CI_DEPLOY_USER CI_DEPLOY_PASSWORD=$CI_DEPLOY_PASSWORD CI_COMMIT_SHA=$CI_COMMIT_SHA CI_PROJECT_PATH=$CI_PROJECT_PATH"
+    
+  when: manual
+    
 
 build_job:
   stage: build
@@ -29,8 +106,49 @@ test_integration_job:
   script:
     - echo 'Testing 2'
 
-deploy_job:
-  stage: deploy
+deploy_dev_job:
+  stage: review
   script:
     - echo 'Deploy'
+  environment:
+    name: dev
+    url: http://dev.example.com
+
+branch review:
+  stage: review
+  before_script: []
+  image: google/cloud-sdk:alpine
+  script: 
+    - echo "Deploy to STAGE _REVIEW_ $CI_ENVIRONMENT_SLUG"
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
+  only:
+    - branches
+  except:
+    - master
+
+stage:
+  stage: stage
+  variables: 
+    GIT_STRATEGY: none
+  when: manual
+  only:
+    - /^\d+\.\d+\.\d+/
+  script:
+    - echo 'Deploy'
+  environment:
+   name: stage
+   url: https://beta.example.com 
+
+production:
+  stage: production
+  when: manual
+  only:
+    - /^\d+\.\d+\.\d+/
+  script:
+    - echo 'Deploy to prod!'
+  environment:
+    name: production
+    url: https://example.com
 

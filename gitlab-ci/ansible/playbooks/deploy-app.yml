@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: Login into the gitlab registry
+    docker_login:
+      registry: "{{ CI_REGISTRY }}"
+      username: "{{ CI_DEPLOY_USER }}"
+      password: "{{ CI_DEPLOY_PASSWORD }}"
+
+  - name: Create Reddit app container
+    docker_container:
+      name: Reddit_Monolith
+      image: "{{ CI_REGISTRY }}/{{ CI_PROJECT_PATH }}/stage-build-{{ CI_COMMIT_SHA }}"
+
+  - name: Start Reddit app container
+    docker_container:
+      name: Reddit_Monolith
+      image: "{{ CI_REGISTRY }}/{{ CI_PROJECT_PATH }}/stage-build-{{ CI_COMMIT_SHA }}"
+      state: started
+      ports:
+       - "80:9292"
+
