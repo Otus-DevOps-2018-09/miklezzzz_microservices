@@ -90,7 +90,7 @@ HW17: Self study
 - "delete_server" step was added into "build" stage to delete 'sandbox' server after all (manually).
 
 ++++++++++++++++++++++++++++
-HW17: Self study
+HW18: Self study
 ++++++++++++++++++++++++++++
 
 - Dockerized Prometheus was configured to monitor microservices health status.
@@ -102,3 +102,10 @@ HW17: Self study
 - Blackbox exporter container was configured and used to perform basic external checks (like http response codes, icmp probes, a tcp port open/closed status) of the microservices.
 
 - The makefile was added to build and push microservices images. It uses Dockerfiles located in src/* directories.
+
+Refs to the DockerHub reps:
+
+https://cloud.docker.com/repository/docker/miklezzzz/prometheus
+https://cloud.docker.com/repository/docker/miklezzzz/comment
+https://cloud.docker.com/repository/docker/miklezzzz/post-py
+https://cloud.docker.com/repository/docker/miklezzzz/ui
