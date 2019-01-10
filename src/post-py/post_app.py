@@ -10,6 +10,8 @@ import time
 CONTENT_TYPE_LATEST = str('text/plain; version=0.0.4; charset=utf-8')
 REQUEST_DB_LATENCY = prometheus_client.Histogram('post_read_db_seconds', 'Request DB time')
 POST_COUNT = prometheus_client.Counter('post_count', 'A counter of new posts')
+UP_VOTE_COUNT = prometheus_client.Counter('post_up_vote_count', 'A counter of up votes')
+DOWN_VOTE_COUNT = prometheus_client.Counter('post_down_vote_count', 'A counter of down votes')
 
 mongo_host = os.getenv('POST_DATABASE_HOST', '127.0.0.1')
 mongo_port = os.getenv('POST_DATABASE_PORT', '27017')
@@ -36,6 +38,10 @@ def vote():
     post_id = request.values.get("id")
     vote_type = request.values.get("type")
     post = mongo_db.find_one({'_id': ObjectId(post_id)})
+    if int(vote_type) > 0:
+        UP_VOTE_COUNT.inc()
+    else:
+        DOWN_VOTE_COUNT.inc()
     post['votes'] += int(vote_type)
     mongo_db.update_one({'_id': ObjectId(post_id)}, {"$set": {"votes": post['votes']}})
     return 'OK'

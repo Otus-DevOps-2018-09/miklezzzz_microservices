@@ -1,0 +1,43 @@
+groups:
+  - name: Instances
+    rules:
+    - alert: InstanceDown
+      expr: up == 0
+      labels:
+        severity: page
+      annotations:
+        description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute'
+        summary: 'Instance {{ $labels.instance }} down'
+
+  - name: DDoS
+    rules:
+    - alert: ToManyRequestsForNewComment
+      expr: rate(ui_request_count{path="/new"}[10s]) > 5
+      labels:
+        severity: page
+      annotations:
+        description: 'To many HTTP requests to /new per second'
+        summary: 'To many HTTP requests to /new per second'
+      
+  - name: CPU_Utilization
+    rules:
+    - alert: CPUutilizationOver40
+      expr: docker_container_cpu_usage_percent > 40
+      labels:
+        severity: page
+      for: 5m
+      annotations:
+        description: 'CPU utilization is over 40% on {{ $labels.container_name }} for 5 minutes'
+        summary: 'Container {{ $labels.container_name }} takes too much CPU time'
+
+  - name: HTTP_responser_time
+    rules:
+    - alert: HighHTTPresponseTime
+      expr: histogram_quantile(0.95, sum(rate(ui_request_latency_seconds_bucket[5m])) by (le)) > 0.15
+      labels:
+        severity: page
+      for: 2m
+      annotations:
+        description: HTTP response time is too high
+        summary: HTTP response time is too high
+

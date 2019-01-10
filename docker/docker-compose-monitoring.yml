@@ -1,0 +1,163 @@
+version: '3.3'
+services:
+ 
+  stackdriver-exporter:
+    image: ${USERNAME}/stackdriver_exp
+    environment:
+      GCP_ACCOUNT: '{
+>>> json data was here <<<
+}'
+    networks:
+      mgm_net:
+        aliases:
+          - stackdriver_exporter
+
+  telegraf:
+    image: ${USERNAME}/telegraf
+    ports:
+      - '9273:9273'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    networks:
+      mgm_net:
+        aliases:
+          - telegraf
+
+  trickster:
+    image: ${USERNAME}/trickster
+    depends_on:
+      - prometheus
+    ports:
+      - '9099:9099'
+    networks:
+      mgm_net:
+        aliases:
+          - trickster
+
+  autoheal: 
+    image: ${USERNAME}/autoheal
+    ports:
+      - '9098:9099'
+    depends_on:
+      - alertmanager
+    environment:
+      - awx_user=user
+      - awx_password=password
+    volumes:
+      - '/home/docker-user/.kube/config:/etc/autoheal/config'
+      - '/home/docker-user/.minikube/ca.crt:/etc/autoheal/ca.crt'
+      - '/home/docker-user/.minikube/client.crt:/etc/autoheal/client.crt'
+      - '/home/docker-user/.minikube/client.key:/etc/autoheal/client.key'
+    networks:
+      mgm_net:
+        aliases:
+          - autoheal
+
+  alertmanager:
+    image: ${USERNAME}/alertmanager
+    command: 
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - '9093:9093'
+    environment:
+      - SMTP_SMARTHOST=smtp.sendgrid.net:587
+      - SMTP_AUTH_USERNAME=user
+      - SMTP_AUTH_PASSWORD=pass
+      - SMTP_TO=mail
+    networks:
+      mgm_net:
+        aliases:
+          - alertmanager
+  
+  grafana:
+    image: ${USERNAME}/grafana
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    ports:
+      - 3000:3000
+    networks:
+      mgm_net:
+        aliases:
+          - grafana 
+
+  cadvisor:
+    image: google/cadvisor:v0.29.0
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:rw'
+      - '/sys:/sys:ro'
+      - '/var/lib/docker/:/var/lib/docker:ro'
+    ports:
+      - '8080:8080'
+    networks:
+      mgm_net:
+        aliases:
+          - cAdvisor
+
+  blackbox-exporter:
+    image: ${USERNAME}/blackbox_exp
+    privileged: yes
+    ports:
+      - '9115:9115'
+    networks:
+      mgm_net:
+        aliases:
+          - blackbox_exporter
+
+  mongod-exporter:
+    image: ${USERNAME}/mongod_exp
+    ports:
+      - '9216:9216'
+    networks:
+      mgm_net:
+        aliases:
+          - mongod_exporter
+
+
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      mgm_net:
+        aliases:
+          - node_exporter
+
+  prometheus:
+    image: ${USERNAME}/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d'
+    networks:
+      mgm_net:
+        aliases:
+          - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  mgm_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.10.0/24
+
