@@ -8,6 +8,10 @@ variable docker_disk_image {
   default     = "ubuntu-1604-lts"
 }
 
+variable svc_account {
+  description = "GCP service account"
+}
+
 variable public_key_path {
   description = "Path to the public key for ssh"
 }

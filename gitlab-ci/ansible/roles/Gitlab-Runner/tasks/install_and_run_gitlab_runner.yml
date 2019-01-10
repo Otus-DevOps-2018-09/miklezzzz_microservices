@@ -10,6 +10,7 @@
     name: gitlab-runner-{{ item }}
     image: gitlab/gitlab-runner:latest
     state: started
+    privileged: yes
     volumes:
       - /srv/gitlab-runner-{{ item }}/config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
@@ -17,7 +18,7 @@
   tags: gitlab-runner-run
 
 - name: Run gitlab-runner
-  command: docker exec gitlab-runner-{{ item }} gitlab-runner register --non-interactive --url http://"{{ gitlab_ip }}" --registration-token "{{ gitlab_token }}" --executor docker --docker-image alpine:latest --name runner-"{{ ansible_hostname }}-gitlab-runner-{{ item }}" --locked False --run-untagged True
+  command: docker exec gitlab-runner-{{ item }} gitlab-runner register --non-interactive --url https://"{{ gitlab_ip }}" --registration-token "{{ gitlab_token }}" --executor docker --docker-image alpine:latest --docker-privileged --name runner-"{{ ansible_hostname }}-gitlab-runner-{{ item }}" --locked False --run-untagged True
   become: true
   loop: "{{ query('sequence', 'start=1 end={{ n_of_runners }}') }}"
   tags: gitlab-runner-run

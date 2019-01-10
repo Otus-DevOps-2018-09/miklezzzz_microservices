@@ -20,5 +20,11 @@ resource "google_compute_instance" "docker" {
   metadata {
     ssh-keys = "shma:${file(var.public_key_path)}"
   }
+
+  service_account {
+    scopes = [ "cloud-platform" ]
+    email = "${var.svc_account}"
+  }
+
 }
 

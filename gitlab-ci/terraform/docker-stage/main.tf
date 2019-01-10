@@ -15,6 +15,7 @@ module "docker" {
   instance_count           = "${var.instance_count}"
   source                   = "../modules/docker"
   public_key_path          = "${var.public_key_path}"
+  svc_account              = "${var.svc_account}"
   name                     = "${var.name}"
   zone                     = "${var.zone}"
   docker_disk_image        = "${var.docker_disk_image}"

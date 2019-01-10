@@ -73,3 +73,18 @@ HW16: Self study
 
 - Basic infrastructure (terraform + ansible) was defined and test to provide a scalable number of Gitlab CI runners in Google cloud.
 
+++++++++++++++++++++++++++++
+HW17: Self study
+++++++++++++++++++++++++++++
+
+- GitlabCI configuration was tuned up to accept connections over SSL. GitlabCI local Registry support was also enabled.
+
+- GitlabCI pipelines were extended by means of variuis selectors like a "only/except/when".
+
+- A couple of dynamic environments was defined in pipelines.
+
+- "build_server" step was added into "build" stage in order to create 'sandbox' server with the Docker running inside (via gcloud utility).
+
+- "deploy_application" step was added into "build" stage in order to build and push Docker container with Reddit application into GitlabCi Registry from where it rolls out onto 'sandbox' server. ( via ansible + gce.py )
+
+- "delete_server" step was added into "build" stage to delete 'sandbox' server after all (manually).

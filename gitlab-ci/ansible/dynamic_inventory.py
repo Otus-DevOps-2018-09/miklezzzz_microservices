@@ -7,7 +7,9 @@ import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-GCS = 'gs://td-docker-back/terraform/state/default.tfstate'
+if os.environ["GCS_BUCKET"]:
+#GCS = 'gs://td-docker-back/terraform/state/default.tfstate'
+	GCS = 'gs://'+os.environ["GCS_BUCKET"]+'/terraform/state/default.tfstate'
 
 os.system('gsutil -q cp '+GCS+' '+current_dir+'/')
 

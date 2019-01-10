@@ -7,6 +7,11 @@ variable project {
   description = "Project ID"
 }
 
+variable svc_account {
+  description = "GCP service account"
+  default = "gitlab-ci@docker-223515.iam.gserviceaccount.com"
+}
+
 variable name {
   description = "Host name"
   default = "docker-host-gitlabrunner"
