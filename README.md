@@ -88,3 +88,24 @@ HW17: Self study
 - "deploy_application" step was added into "build" stage in order to build and push Docker container with Reddit application into GitlabCi Registry from where it rolls out onto 'sandbox' server. ( via ansible + gce.py )
 
 - "delete_server" step was added into "build" stage to delete 'sandbox' server after all (manually).
+
+++++++++++++++++++++++++++++
+HW18: Self study
+++++++++++++++++++++++++++++
+
+- Dockerized Prometheus was configured to monitor microservices health status.
+
+- Node exporter container was used to monitor the status of the docker-machine.
+
+- Percona mongodb exporter container was used to monitor various mongodb metrics of the post_db microservice.
+
+- Blackbox exporter container was configured and used to perform basic external checks (like http response codes, icmp probes, a tcp port open/closed status) of the microservices.
+
+- The makefile was added to build and push microservices images. It uses Dockerfiles located in src/* directories.
+
+Refs to the DockerHub reps:
+
+https://cloud.docker.com/repository/docker/miklezzzz/prometheus
+https://cloud.docker.com/repository/docker/miklezzzz/comment
+https://cloud.docker.com/repository/docker/miklezzzz/post-py
+https://cloud.docker.com/repository/docker/miklezzzz/ui

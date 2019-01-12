@@ -1,9 +1,0 @@
-REPOSITORY                  TAG                 IMAGE ID            CREATED             SIZE
-miklezzzz/ubuntu-tmp-file   latest              0d4db66347fa        4 seconds ago       116MB
-ubuntu                      16.04               a51debf7e1eb        44 hours ago        116MB
-hello-world                 latest              4ab4c602aa5e        2 months ago        1.84kB
-
-Based on an output of <docker inspect image_id> vs <docker inspect contrainter_id> i suppose that the main difference between Docker image and Docker container is the fact that a container is a running(or stopped) instance of an image with additional features like top writeable layer to hold any changes while operating and network interfaces for communications.
-
-"Parent" attribute of a container is equal to "Image" attribite of an image and it means that a container's file system is build on top of an image while an image itself is a set of read-only layers (each layer consists of changes from previous layer).
-

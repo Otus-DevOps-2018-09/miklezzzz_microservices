@@ -1,0 +1,125 @@
+version: '3.3'
+services:
+
+  blackbox-exporter:
+    image: ${USERNAME}/blackbox_exp
+    privileged: yes
+    ports:
+      - '9115:9115'
+    networks:
+      mgm_net:
+        aliases:
+          - blackbox_exporter
+
+  mongod-exporter:
+    image: ${USERNAME}/mongod_exp
+    ports:
+      - '9216:9216'
+    networks:
+      mgm_net:
+        aliases:
+          - mongod_exporter
+
+
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      mgm_net:
+        aliases:
+          - node_exporter
+
+  prometheus:
+    image: ${USERNAME}/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d'
+    networks:
+      mgm_net:
+        aliases:
+            - prometheus
+
+  post_db:
+    image: mongo:$post_db_version
+    volumes:
+      - post_db:/data/db
+    networks:
+      back_net:
+          aliases:
+            - $app_post_db
+            - $app_comment_db
+      mgm_net:
+        aliases:
+            - $app_post_db
+
+  ui:
+    image: ${USERNAME}/ui:$ui_version
+    ports:
+      - $external_ui_port:$internal_ui_port/tcp
+    networks:
+      front_net:
+          aliases:
+            - $app_ui
+      mgm_net:
+        aliases:
+            - $app_ui
+
+  post:
+    image: ${USERNAME}/post:$post_version
+    networks:
+      front_net:
+          aliases:
+            - $app_post
+      back_net:
+          aliases:
+            - $app_post
+      mgm_net:
+        aliases:
+            - $app_post
+
+  comment:
+    image: ${USERNAME}/comment:$comment_version
+    networks:
+      front_net:
+          aliases:
+            - $app_comment
+      back_net:
+          aliases:
+            - $app_comment
+      mgm_net:
+        aliases:
+            - $app_comment
+
+volumes:
+  post_db:
+  prometheus_data:
+
+networks:
+  front_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  back_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+  mgm_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.10.0/24
