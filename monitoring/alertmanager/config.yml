@@ -1,0 +1,27 @@
+global:
+  slack_api_url: 'https://hooks.slack.com/services/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'
+  resolve_timeout: 60s
+  smtp_from: my-docker-host@example.org
+
+route:
+  receiver: 'notifications'
+  group_wait: 5s
+  group_interval: 5s
+  repeat_interval: 5m
+ 
+
+receivers:
+- name: 'notifications'
+  slack_configs:
+  - send_resolved: true
+  email_configs:
+  - to: SMTP_TO
+    from: my-docker-host@example.org
+    smarthost: SMTP_SMARTHOST
+    send_resolved: true
+    auth_username: SMTP_AUTH_USERNAME
+    auth_identity: SMTP_AUTH_USERNAME
+    auth_password: SMTP_AUTH_PASSWORD
+    require_tls: true
+  webhook_configs:
+  - url: http://autoheal:9099/alerts

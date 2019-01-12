@@ -3,6 +3,27 @@ global:
   scrape_interval: '5s'
 
 scrape_configs:
+
+  - job_name: 'post'
+    static_configs:
+      - targets:
+        - 'post:5000'
+
+  - job_name: 'telegraf'
+    static_configs: 
+      - targets: 
+        - 'telegraf:9273'
+
+  - job_name: 'autoheal'
+    static_configs: 
+      - targets: 
+        - 'autoheal:9099'
+
+  - job_name: 'trickster'
+    static_configs: 
+      - targets: 
+        - 'trickster:8082'
+
   - job_name: 'prometheus'
     static_configs: 
       - targets: 
@@ -18,17 +39,27 @@ scrape_configs:
       - targets:
         - 'comment:9292'
 
-  - job_name: 'node'
+  - job_name: 'stackdriver-exporter'
+    static_configs:
+      - targets:
+        - 'stackdriver_exporter:9255'
+
+  - job_name: 'node-exporter'
     static_configs:
       - targets:
         - 'node_exporter:9100'
 
-  - job_name: 'mongod'
+  - job_name: 'mongod-exporter'
     static_configs:
       - targets:
         - 'mongod_exporter:9216'
 
-  - job_name: 'blackbox-http'
+  - job_name: 'docker-itself'
+    static_configs:
+      - targets:
+        - '10.0.10.1:9323'
+
+  - job_name: 'blackbox-exporter'
     metrics_path: /probe
     params:
       module: [http_2xx]  # Look for a HTTP 200 response.
@@ -95,3 +126,18 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox_exporter:9115  # The blackbox exporter's real hostname:port.
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+        - 'cAdvisor:8080'
+
+rule_files:
+  - "alerts.yml"
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "alertmanager:9093"

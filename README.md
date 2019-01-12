@@ -109,3 +109,39 @@ https://cloud.docker.com/repository/docker/miklezzzz/prometheus
 https://cloud.docker.com/repository/docker/miklezzzz/comment
 https://cloud.docker.com/repository/docker/miklezzzz/post-py
 https://cloud.docker.com/repository/docker/miklezzzz/ui
+
+++++++++++++++++++++++++++++
+HW19: Self study
+++++++++++++++++++++++++++++
+
+- Docker-compose.yml file was splitted up to two files: one for microservices and another for monitoring tools.
+
+- A Docker container with cAdvisor monitoring tool from Google was deployed and prepared along with Prometheus to collect docker containers stats. Also, the Docker host's stats can be collected too.
+
+- A Docker container with Grafana was deployed as a vizualisation part of our monitoring system with neat WEB UI. Prometheus database was assigned as a default datasource for Grafana. Few dashboards were imported/created for testing purposes like monitoring and observing application busines metrics.
+
+- Alertmanager for Prometheus was deployed and configured to provide an alerting part (via slack webhooks) of our monitoring systsem.
+
+- Makefile from previous HW was enhanced: now it rebuilds (on update) and pushes all related docker images into Docker Hub. (and it looks pretty messy)
+
+- Docker host was configured as a Prometheus target in order to collect it stats. However, it can't provide as much useful metrics as cAdvisor can. Despite of this, an example dashboard for Grafana named DockerEngineIntegratedMetrics.json was created and placed into dashboards directory.
+
+- Dockerized Telegraf monitoring tool was configured to obtain and export Docker's Engine host statistics. There are much more useful metrics about Docker that can be obtained, comparing to the integrated target. But still not enough to put up a challenge on cAdvisor.
+
+- Few additional alerts were added to the Alertmanager: high CPU usage per a container (over 40%), high UI response time (95th percentile), too many simultaneous requests to "new comment".
+
+- Alertmanager was configured to send notifications via the Sendgrid email sender service provider.
+
+- Grafana datasources and dashboards auto provisioning was configured.
+
+- Frodenas stackdriver exporter for the Prometheus was used to obtain a GCE instance stats like cpu/diskIO/network usage from the Google Stackdriver. 
+
+- A couple of self made business metrics was introduced: separate votes counters to observe user activity/app misbehaving, total number of unique usernames used to comment and total number of unique emails used to comment.
+
+- Trickster the caching proxy for Grafana was configured and deployed.
+
+- Openshift/Autoheal the auto-heal service was configured (along with Alertmanager) to accept notifications from Alertmanager (via webhook) and execute Ansible/AWX templates (by means of the AWX REST api).
+
+- Dockerized Ansible/AWX instance was deployed and configured to accept Auto-Heal notifications and execute simple Ansible play books in order to revive failed services (containers).
+
+

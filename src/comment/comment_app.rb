@@ -17,9 +17,13 @@ prometheus = Prometheus::Client.registry
 comment_health_gauge = Prometheus::Client::Gauge.new(:comment_health, 'Health status of Comment service')
 comment_health_db_gauge = Prometheus::Client::Gauge.new(:comment_health_mongo_availability, 'Check if MongoDB is available to Comment')
 comment_count = Prometheus::Client::Counter.new(:comment_count, 'A counter of new comments')
+comment_unique_users_count = Prometheus::Client::Gauge.new(:comment_unique_users_count, 'A counter of unique users')
+comment_unique_emails_count = Prometheus::Client::Gauge.new(:comment_unique_emails_count, 'A counter of unique emails')
 prometheus.register(comment_health_gauge)
 prometheus.register(comment_health_db_gauge)
 prometheus.register(comment_count)
+prometheus.register(comment_unique_users_count)
+prometheus.register(comment_unique_emails_count)
 
 ## Schedule healthcheck function
 if File.exist?('build_info.txt')
@@ -53,6 +57,8 @@ post '/add_comment/?' do
   result = db.insert_one post_id: params['post_id'], name: params['name'], email: params['email'], body: params['body'], created_at: params['created_at']
   db.find(_id: result.inserted_id).to_a.first.to_json
   comment_count.increment
+  comment_unique_users_count.set( {users: 'unique'}, db.distinct('name').length)
+  comment_unique_emails_count.set( {emails: 'unique'}, db.distinct('email').length)
 end
 
 get '/healthcheck' do

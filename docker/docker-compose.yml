@@ -1,57 +1,6 @@
 version: '3.3'
 services:
 
-  blackbox-exporter:
-    image: ${USERNAME}/blackbox_exp
-    privileged: yes
-    ports:
-      - '9115:9115'
-    networks:
-      mgm_net:
-        aliases:
-          - blackbox_exporter
-
-  mongod-exporter:
-    image: ${USERNAME}/mongod_exp
-    ports:
-      - '9216:9216'
-    networks:
-      mgm_net:
-        aliases:
-          - mongod_exporter
-
-
-  node-exporter:
-    image: prom/node-exporter:v0.15.2
-    user: root
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
-    networks:
-      mgm_net:
-        aliases:
-          - node_exporter
-
-  prometheus:
-    image: ${USERNAME}/prometheus
-    ports:
-      - '9090:9090'
-    volumes:
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention=1d'
-    networks:
-      mgm_net:
-        aliases:
-            - prometheus
-
   post_db:
     image: mongo:$post_db_version
     volumes:
@@ -78,7 +27,7 @@ services:
             - $app_ui
 
   post:
-    image: ${USERNAME}/post:$post_version
+    image: ${USERNAME}/post-py:$post_version
     networks:
       front_net:
           aliases:
@@ -105,7 +54,6 @@ services:
 
 volumes:
   post_db:
-  prometheus_data:
 
 networks:
   front_net:
