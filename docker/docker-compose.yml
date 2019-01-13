@@ -1,8 +1,10 @@
-version: '3.3'
+version: '3'
 services:
 
   post_db:
     image: mongo:$post_db_version
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     volumes:
       - post_db:/data/db
     networks:
@@ -12,10 +14,12 @@ services:
             - $app_comment_db
       mgm_net:
         aliases:
-            - $app_post_db
+            - post_db_mgmt
 
   ui:
     image: ${USERNAME}/ui:$ui_version
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     ports:
       - $external_ui_port:$internal_ui_port/tcp
     networks:
@@ -24,10 +28,17 @@ services:
             - $app_ui
       mgm_net:
         aliases:
-            - $app_ui
+            - ui_mgmt
+    logging:
+      driver: "fluentd"
+      options: 
+        fluentd-address: localhost:24224
+        tag: service.ui
 
   post:
-    image: ${USERNAME}/post-py:$post_version
+    image: ${USERNAME}/post:$post_version
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     networks:
       front_net:
           aliases:
@@ -37,10 +48,17 @@ services:
             - $app_post
       mgm_net:
         aliases:
-            - $app_post
+            - post_mgmt
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.post
 
   comment:
     image: ${USERNAME}/comment:$comment_version
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
     networks:
       front_net:
           aliases:
@@ -50,7 +68,7 @@ services:
             - $app_comment
       mgm_net:
         aliases:
-            - $app_comment
+            - comment_mgmt
 
 volumes:
   post_db:
