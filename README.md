@@ -145,3 +145,21 @@ HW19: Self study
 - Dockerized Ansible/AWX instance was deployed and configured to accept Auto-Heal notifications and execute simple Ansible play books in order to revive failed services (containers).
 
 
+++++++++++++++++++++++++++++
+HW20: Self study
+++++++++++++++++++++++++++++
+
+- The microservices' source code was updated to support logging feature.
+
+- EFK stack (Elastic/FluentD/Kibana) was deployed as a centralized logging system.
+
+- A Docker logging driver for Post and UI services was changed to "fluentd".
+
+- Fluentd instance was configured with filters to parse JSON-formatted Post's logs and unstructured logs from UI service.
+
+- Kibana WEB UI was explored to understand how to perform search and filtering.
+
+- Zipkin the distributed tracing system was deployed and microservices were reconfigued with an environment variable to support tracing.
+
+- Fake bug in Post's service code was traced down and remediated by powerful "#".
+
