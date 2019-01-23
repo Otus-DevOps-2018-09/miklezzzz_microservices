@@ -1,0 +1,9 @@
+---
+- name: TASK 2 ----------- Local install client tools
+  hosts: localhost
+  connection: local
+  become: yes
+  gather_facts: true
+    
+  roles:
+    - install_prerequisites

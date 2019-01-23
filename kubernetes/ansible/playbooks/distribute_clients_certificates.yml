@@ -1,0 +1,8 @@
+---
+- name: TASK 4 ----------- Distribute client and CA certificates to workers
+  hosts: tag_worker
+  become: yes
+
+  roles:
+    - distribute_clients_certificates
+

@@ -1,0 +1,8 @@
+---
+- name: TASK 12 ----------- Distribute kubernetes configs to controllers
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - download_and_install_kubernetes_controller_binaries
+

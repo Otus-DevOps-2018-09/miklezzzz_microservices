@@ -1,0 +1,8 @@
+---
+- name: TASK 8 ----------- Distribute kubernetes configs to controllers
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - distribute_kubernetes_configs_to_controllers
+

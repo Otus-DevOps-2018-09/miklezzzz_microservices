@@ -1,0 +1,8 @@
+---
+- name: TASK 19 ----------- Configure containerd, kubelet and kubernetes-proxy on workers
+  hosts: tag_worker
+  become: yes
+
+  roles:
+    - configure_and_run_containerd_kubelet_kubeproxy
+

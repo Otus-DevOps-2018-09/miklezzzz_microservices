@@ -1,0 +1,8 @@
+---
+- name: Distribute etcd service configuration and install the service
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - install_etcd_service
+

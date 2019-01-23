@@ -1,0 +1,8 @@
+---
+- name: TASK 14 ----------- Distribute and install kube-api, kube-controller-manager, kube-scherduler services
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - install_kubeapi_kubecontroller_kubescheduler_services
+

@@ -1,0 +1,8 @@
+---
+- name: TASK 5 ----------- Distribute server-side and CA certificates to controllers
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - distribute_servers_certificates
+

@@ -1,0 +1,33 @@
+---
+- name: Main Playbook
+  hosts: tag_worker:tag_controller
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  vars:
+    path_to_pki: '/opt/pki-infrastructure'
+
+  
+- import_playbook: install_python.yml
+- import_playbook: install_prerequisites.yml
+- import_playbook: provision_ca_infrastructure.yml
+- import_playbook: distribute_clients_certificates.yml
+- import_playbook: distribute_servers_certificates.yml
+- import_playbook: generate_kubernetes_configs.yml
+- import_playbook: distribute_kubernetes_configs_to_workers.yml
+- import_playbook: distribute_kubernetes_configs_to_controllers.yml
+- import_playbook: generate_encryption_config.yml
+- import_playbook: distribute_encryption_config.yml
+- import_playbook: generate_etcd_service_config.yml
+- import_playbook: install_etcd_service.yml
+- import_playbook: download_and_install_kubernetes_controller_binaries.yml
+- import_playbook: generate_kubeapi_service_config.yml
+- import_playbook: install_kubeapi_kubecontroller_kubescheduler_services.yml
+- import_playbook: install_and_configure_nginx4lb.yml
+- import_playbook: enable_rbac_for_kubelet_auth.yml
+- import_playbook: provisioning_worker_nodes.yml
+- import_playbook: configure_cni_network_on_workers.yml
+- import_playbook: configure_and_run_containerd_kubelet_kubeproxy.yml
+- import_playbook: generate_admin_config_for_ra.yml
+- import_playbook: deploy_coredns.yml
+

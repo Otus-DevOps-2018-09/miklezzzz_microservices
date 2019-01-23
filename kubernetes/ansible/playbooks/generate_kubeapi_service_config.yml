@@ -1,0 +1,13 @@
+---
+- name: TASK 13 ----------- Generate Kube API service config from template
+  hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - vars.yml
+  vars:
+
+
+  roles:
+    - generate_kubeapi_service_config
+

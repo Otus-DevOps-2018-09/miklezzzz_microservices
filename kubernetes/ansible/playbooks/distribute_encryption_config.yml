@@ -1,0 +1,8 @@
+---
+- name: TASK 10 ----------- Distribute encryption config to controllers
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - distribute_encryption_config
+

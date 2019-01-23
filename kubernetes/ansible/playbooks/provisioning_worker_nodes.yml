@@ -1,0 +1,8 @@
+---
+- name: TASK 17 ----------- Provisioning worker nodes
+  hosts: tag_worker
+  become: yes
+
+  roles:
+    - provisioning_worker_nodes
+
