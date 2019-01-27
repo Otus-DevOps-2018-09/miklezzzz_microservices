@@ -1,0 +1,8 @@
+---
+- name: TASK 15 ----------- Install and configure NGINX to proxypass /healthz from tcp:80 to tcp:6443
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - install_and_configure_nginx4lb
+

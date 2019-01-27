@@ -1,0 +1,8 @@
+---
+- name: TASK 7 ----------- Distribute kubernetes configs to workers
+  hosts: tag_worker
+  become: yes
+
+  roles:
+    - distribute_kubernetes_configs_to_workers
+

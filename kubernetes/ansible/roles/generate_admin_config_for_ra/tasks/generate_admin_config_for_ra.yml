@@ -1,0 +1,36 @@
+---
+ - name: Generate kubeconfig for remote access - set cluster
+   shell: kubectl config set-cluster kubernetes-the-hard-way --certificate-authority=/opt/pki-infrastructure/ca.pem --embed-certs=true --server=https://$(gcloud compute addresses describe kubernetes-the-hard-way --region $(gcloud config get-value compute/region) --format 'value(address)'):6443 --kubeconfig=config
+   args:
+     chdir: "/opt/pki-infrastructure/"
+
+ - name: Generate kubeconfig for remote access - set credentials
+   shell: kubectl config set-credentials admin --client-certificate=/opt/pki-infrastructure/admin.pem --client-key=/opt/pki-infrastructure/admin-key.pem --embed-certs=true --kubeconfig=config
+   args:
+     chdir: "/opt/pki-infrastructure/"
+
+ - name: Generate kubeconfig for remote access - set context
+   shell: kubectl config set-context kubernetes-the-hard-way --cluster=kubernetes-the-hard-way --user=admin --kubeconfig=config
+   args:
+     chdir: "/opt/pki-infrastructure/"
+
+ - name: Generate kubeconfig for remote access - set default context
+   shell: kubectl config use-context kubernetes-the-hard-way --kubeconfig=config
+   args:
+     chdir: "/opt/pki-infrastructure/"
+
+ - name: Test connection
+   shell: kubectl get componentstatuses --kubeconfig /opt/pki-infrastructure/config
+   register: test
+
+ - name: Show output
+   debug:
+     msg: "{{ test }}"
+ 
+ - name: Test connection 2
+   shell: kubectl get nodes --kubeconfig /opt/pki-infrastructure/config
+   register: test2
+
+ - name: Show output 2
+   debug:
+     msg: "{{ test2 }}"

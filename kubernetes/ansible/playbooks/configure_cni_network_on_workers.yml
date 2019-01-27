@@ -1,0 +1,8 @@
+---
+- name: TASK 18 ----------- Configure CNI network on workers
+  hosts: tag_worker
+  become: yes
+
+  roles:
+    - configure_cni_network_on_workers
+

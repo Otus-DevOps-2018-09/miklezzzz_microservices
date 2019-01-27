@@ -1,0 +1,8 @@
+---
+- name: TASK 16 ----------- Configure RBAC for Kubelet Authorization
+  hosts: tag_controller
+  become: yes
+
+  roles:
+    - enable_rbac_for_kubelet_auth
+

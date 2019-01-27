@@ -163,3 +163,14 @@ HW20: Self study
 
 - Fake bug in Post's service code was traced down and remediated by powerful "#".
 
+++++++++++++++++++++++++++++
+HW21: Self study
+++++++++++++++++++++++++++++
+
+- Kubernetes deployments files for the Reddit application were prepared and tested.
+
+- Kubernetes the Hard Way tutorial was completed manualy.
+
+- Terraform configuration was prepared to deploy an appropriate cloud infrastructure.
+
+- Ansible playbooks were prepared to perform a Kubernetes cluster configuration the same way as KtHW does.

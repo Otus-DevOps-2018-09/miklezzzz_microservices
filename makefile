@@ -8,7 +8,7 @@ build_monitoring: ./monitoring/alertmanager/.build_am ./monitoring/exporter_blac
 	docker build -t $(USERNAME)/ui ./src/ui/ && docker push $(USERNAME)/ui && touch ./src/ui/.build_ui && echo "UI READY!"
 
 ./src/post-py/.build_post-py: ./src/post-py/Dockerfile ./src/post-py/*.py ./src/post-py/VERSION
-	docker build -t $(USERNAME)/post-py ./src/post-py/ && docker push $(USERNAME)/post-py && touch ./src/post-py/.build_post-py && echo "POST-PY READY!"
+	docker build -t $(USERNAME)/post ./src/post-py/ && docker push $(USERNAME)/post && touch ./src/post-py/.build_post-py && echo "POST-PY READY!"
 
 ./src/comment/.build_comment: ./src/comment/Dockerfile ./src/comment/*.rb ./src/comment/VERSION
 	docker build -t $(USERNAME)/comment ./src/comment/ && docker push $(USERNAME)/comment && touch ./src/comment/.build_comment && echo "COMMENT READY!"
