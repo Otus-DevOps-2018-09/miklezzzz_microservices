@@ -174,3 +174,21 @@ HW21: Self study
 - Terraform configuration was prepared to deploy an appropriate cloud infrastructure.
 
 - Ansible playbooks were prepared to perform a Kubernetes cluster configuration the same way as KtHW does.
+
+++++++++++++++++++++++++++++
+HW22: Self study
+++++++++++++++++++++++++++++
+
+- Minikube instance with VirtualBox was used to deploy Reddit application on the localhost.
+
+- Kubectl utility was used to perform basic operations against Kubernetes cluster.
+
+- Manifests used for deployments were supplemented with labels. Few new manifests were added: for services and for the dev namespace. All this stuff was tested with minikube.
+
+- Google Kubernetes Engine instance with Reddit application was launched in GCP.
+
+- ClusterRoleBinding entity was created in order to provide access to Kubernetes API for the kubernetes-dashboard user.
+
+- Terraform configuration for GKE instance creation was prepared and test.
+
+- ClusterRoleBinding manifest was prepared to configure the kubernetes-dashboard user with the cluster-admin role.
