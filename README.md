@@ -192,3 +192,18 @@ HW22: Self study
 - Terraform configuration for GKE instance creation was prepared and test.
 
 - ClusterRoleBinding manifest was prepared to configure the kubernetes-dashboard user with the cluster-admin role.
+
+++++++++++++++++++++++++++++
+HW23: Self study
+++++++++++++++++++++++++++++
+
+- During this homework the following Kubernetes entities were studied and test:
+  1) services (ClusterIP, NodePort, LoadBalancer)
+  2) kube-dns plugin
+  3) ingress controller
+  4) secrets and tls termination
+  5) network policies
+  6) volumes (emptyDir, persistentVolume, persistenVolumeClaim
+  7) storageclass
+
+- The yaml manifest named ui-secret.yml type "secret" was added to provide a certificate/private key pair used by an Ingress controller for TLS termination.
