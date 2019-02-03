@@ -207,3 +207,22 @@ HW23: Self study
   7) storageclass
 
 - The yaml manifest named ui-secret.yml type "secret" was added to provide a certificate/private key pair used by an Ingress controller for TLS termination.
+
+++++++++++++++++++++++++++++
+HW24: Self study
+++++++++++++++++++++++++++++
+
+- Terraform configuration for GKE instance from HW22 was enhanced: an additional pool with a type "n1-standard-2" machine added to a cluster (to be able to run Gitlab).
+
+- Helm the packet manager client/server utility for the Kubernetes was installed and used to deploy an infrastructure and services.
+
+- A Gitlab chart for Helm was downloaded from a repository and Gitlab Omnibus instance was deployed in the Kubernetes.
+
+- Gitlab CI/CD basic configuration was performed (variables,a group,projects, etc).
+
+- Gitlab CI/CD pipelines were configred and tested to build and deploy Reddit application into the Kubernetes cluster.
+
+- In order to configure multi-project pipelines a pipeline trigger was created in "reddit-deploy" project. It is used as a token value in an API call to the Gitlab API server during "deploy" stage which is triggered after "release" stage in the master branch.
+
+- "Reddit-deploy" project pipeline was slightly modified and now it includes two "production" stages: one is for manual run (it looks like original pipeline: test->staging->manual production) and second one is for automatic run via multi-project pipelines so there is no need for "staging" phase (it looks like ui/post/comment deploy->API call->test->automatic production).
+
