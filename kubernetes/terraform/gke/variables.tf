@@ -9,7 +9,7 @@ variable region {
 
 variable zone {
   description = "Zone"
-  default     = "europe-west1-b"
+  default     = "europe-west1-d"
 }
 
 variable public_key_path {

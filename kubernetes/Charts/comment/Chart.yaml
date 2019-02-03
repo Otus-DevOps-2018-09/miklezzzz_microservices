@@ -1,0 +1,8 @@
+---
+name: comment
+version: 1.0.0
+description: OTUS Reddit application COMMENT
+maintainers:
+  - name: Mikhail Scherba
+    email: my@mail.com
+appVersion: 1.0
