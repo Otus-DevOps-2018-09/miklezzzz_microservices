@@ -1,0 +1,14 @@
+comment:
+  image:
+    repository: miklezzzz
+    tag: latest
+  service:
+    externalPort: 9292
+
+post:
+  image:
+    repository: miklezzzz
+    tag: latest
+  service:
+    externalPort: 5000
+
