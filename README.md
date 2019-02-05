@@ -226,3 +226,27 @@ HW24: Self study
 
 - "Reddit-deploy" project pipeline was slightly modified and now it includes two "production" stages: one is for manual run (it looks like original pipeline: test->staging->manual production) and second one is for automatic run via multi-project pipelines so there is no need for "staging" phase (it looks like ui/post/comment deploy->API call->test->automatic production).
 
+++++++++++++++++++++++++++++
+HW25: Self study
+++++++++++++++++++++++++++++
+
+- Stable/Nginx-ingress controller was installed via Helm utility as an ingress controller for a cluster.
+
+- Prometheus instance was installed with Helm utility. Prometheus targets for monitoring were discovered with the kubernetes service discovery feature.
+
+- Kube-state-metrics and Node-Exporter services were enabled in Prometheus configuration to gather k8s cluster metrics and nodes metrics.
+
+- Prometheus configuration was customized to sort out and adopt some metrics gathered from Reddit application services. Prometheus targets for Reddit application were rearranged into three separate jobs where each job is in charge of monitoring certain endpoints (post/comment/ui).
+
+- Grafana instance was installed via Helm utility and some popular dashboards were imported  into it to feel yourself like a spaceship pilot.
+
+- A couple of dashboards from previous home works were imported and parameterized to use custom variables like "namespace". Improved dashboards can be found at the "monitoring/grafana/dashboards" path.
+
+- Prometheus was reconfigured to use the alertmanager service to notify about alerts via Slack web-hook. Also, two alert rules were added: to monitor kube-api server reachability and to ping cluster nodes ( Blackbox exporter service was installed to make it possible).
+
+- Prometheus was reconfigured to use the alertmanager service to notify about alarms via Slack web-hook. Also, two alert rules were added: to monitor kube-api server reachability and to ping cluster nodes ( Blackbox exporter service was installed to make it works).
+
+- EFK stack was installed and used as a logging service. 
+
+- EFK Helm chart was created and added to the repository.
+

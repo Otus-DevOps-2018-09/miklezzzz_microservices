@@ -8,8 +8,10 @@ metadata:
      component: post
      release: {{ .Release.Name }}
 spec:
+  type: NodePort
   ports:
-  - port: {{ .Values.service.externalPort }}
+  - name: web
+    port: {{ .Values.service.externalPort }}
     protocol: TCP
     targetPort: {{ .Values.service.internalPort }}
   selector:
