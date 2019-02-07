@@ -244,7 +244,7 @@ HW25: Self study
 
 - Prometheus was reconfigured to use the alertmanager service to notify about alerts via Slack web-hook. Also, two alert rules were added: to monitor kube-api server reachability and to ping cluster nodes ( Blackbox exporter service was installed to make it possible).
 
-- Prometheus was reconfigured to use the alertmanager service to notify about alarms via Slack web-hook. Also, two alert rules were added: to monitor kube-api server reachability and to ping cluster nodes ( Blackbox exporter service was installed to make it works).
+- Prometheus Operator instance was deployed and configured to configure Prometheus service to discover and monitor "Post" service's endpoints by means of a ServiceMonitor entity. Prometheus service web UI is available over <node_ip>:tcp30900 port and can be used to check that a service discovery is workring as we expected and related metrics are in place.
 
 - EFK stack was installed and used as a logging service. 
 
