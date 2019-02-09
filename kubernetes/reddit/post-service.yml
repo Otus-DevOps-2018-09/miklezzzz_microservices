@@ -7,8 +7,11 @@ metadata:
      app: reddit
      component: post
 spec:
+  type: NodePort
   ports:
-  - port: 5000
+  - nodePort: 30500
+    name: web
+    port: 5000
     protocol: TCP
     targetPort: 5000
   selector:

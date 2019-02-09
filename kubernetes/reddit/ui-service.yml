@@ -9,8 +9,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 9292 
+  - nodePort: 30292
     protocol: TCP
+    port: 9292
     targetPort: 9292
   selector: 
     app: reddit

@@ -23,8 +23,6 @@ resource "google_container_node_pool" "powerful-worker" {
     oauth_scopes = [
       "compute-rw",
       "storage-ro",
-      "logging-write",
-      "monitoring",
     ]
     tags = [
       "powerful-worker"
@@ -35,11 +33,13 @@ resource "google_container_node_pool" "powerful-worker" {
 resource "google_container_cluster" "gke-cluster" {
   name		= "gke-cluster"
   zone		= "${var.zone}"
-  node_version = "1.10.11-gke.1"
-  min_master_version = "1.10.11-gke.1"
-  enable_legacy_abac = true
+  node_version = "1.11.6-gke.6"
+  min_master_version = "1.11.6-gke.6"
   initial_node_count = 3
-
+  logging_service    = "none"
+  monitoring_service = "none"
+  enable_legacy_abac = "false"
+ 
   lifecycle {
     ignore_changes = ["node_pool"]
   }
@@ -50,18 +50,12 @@ resource "google_container_cluster" "gke-cluster" {
     oauth_scopes = [
       "compute-rw",
       "storage-ro",
-      "logging-write",
-      "monitoring",
     ]
     tags = [
       "default-worker"
     ]
   }
   
-  master_auth {
-    username = ""
-    password = ""
-  }
   addons_config {
     kubernetes_dashboard {
       disabled = false
